@@ -4,59 +4,65 @@ import re
 from uagents import Agent, Context, Model
 from uagents.setup import fund_agent_if_low
 
-# Import the logic function (mock or real implementation)
+# Import the logic from Developer B's file
 from logic import get_canister_status_message
 
 # --- Agent Configuration ---
 AGENT_SEED = "canister_guard_agent_secret_seed_phrase__make_this_unique"
-agent = Agent(
-    name="canister_guard_agent",
-    seed=AGENT_SEED,
-    port=8000,
-    endpoint="wss://agents.fetch.ai/testnet"  # Local testing
-)
-
-
-# Fund the agent if it has low balance (testnet faucet)
+agent = Agent(name="canister_guard_agent", seed=AGENT_SEED)
 fund_agent_if_low(agent.wallet.address())
 
-# --- Message Schema ---
 class Message(Model):
     text: str
 
-# Regex to match ICP canister IDs
+# Regex to find an ICP canister ID in a string of text
 CANISTER_ID_REGEX = r'([a-z0-9]{5}-){4,}[a-z0-9]{3}'
 
-# --- Message Handler ---
 @agent.on_message(model=Message)
 async def handle_message(ctx: Context, sender: str, msg: Message):
-    ctx.logger.info(f"📩 Received message from {sender}: {msg.text}")
+    ctx.logger.info(f"Received message from {sender}: {msg.text}")
 
-    # Step 1: Look for a canister ID in the text
+    # Step 1: Parse the user's input to find a canister ID
     match = re.search(CANISTER_ID_REGEX, msg.text)
+
     if not match:
-        ctx.logger.info("❌ No canister ID found in message.")
-        error_message = "I couldn't find a valid canister ID in your message. Please include the full ID."
+        # UNHAPPY PATH 1: No Canister ID found in the message
+        ctx.logger.info("No canister ID found in message.")
+        error_message = (
+            "I couldn't find a valid canister ID in your message. "
+            "Please include a valid ICP canister ID (e.g., 'uxrrr-q7777-77774-qaaaq-cai') "
+            "in your request."
+        )
         await ctx.send(sender, Message(text=error_message))
         return
 
     target_canister_id = match.group(0)
 
-    # Step 2: Try to fetch status
+    # Step 2: Try to get the status, handling any potential errors
     try:
-        ctx.logger.info(f"🔍 Found canister ID: {target_canister_id}. Fetching status...")
+        ctx.logger.info(f"Found canister ID: {target_canister_id}. Getting status...")
 
-        # Call Developer B’s logic (mock or real)
-        reply_text = get_canister_status_message(target_canister_id)
+        # Call the logic function to get the canister status
+        # This will automatically fetch from the local backend canister
+        reply_text = get_canister_status_message()
 
         await ctx.send(sender, Message(text=reply_text))
 
     except Exception as e:
-        ctx.logger.error(f"⚠️ Error while getting canister status: {e}")
-        error_message = f"Sorry, an error occurred while checking {target_canister_id[:5]}.... Please try again later."
+        # UNHAPPY PATH 2: The logic function failed for some reason
+        ctx.logger.error(f"An error occurred while getting status: {e}")
+        error_message = (
+            f"Sorry, an unexpected error occurred while checking the canister status. "
+            f"Please make sure the backend is running locally and try again."
+        )
         await ctx.send(sender, Message(text=error_message))
 
-# --- Run Agent ---
 if __name__ == "__main__":
-    print(f"🚀 Agent started! Address: {agent.address}")
+    print(f"🚀 CanisterGuard Agent Starting...")
+    print(f"Agent address: {agent.address}")
+    print(f"Agent name: {agent.name}")
+    print(f"Ready to receive messages!")
+    print(f"Send a message with a canister ID to get status information.")
+    print(f"Example: 'Check status of uxrrr-q7777-77774-qaaaq-cai'")
+    print("-" * 50)
     agent.run()
