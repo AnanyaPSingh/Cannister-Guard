@@ -6,10 +6,11 @@ from uagents.setup import fund_agent_if_low
 
 # Import the logic from Developer B's file
 from logic import get_canister_status_message
+from message_logger import log_incoming, log_outgoing
 
 # --- Agent Configuration ---
-AGENT_SEED = "canister_guard_agent_secret_seed_phrase__make_this_unique"
-agent = Agent(name="canister_guard_agent", seed=AGENT_SEED)
+AGENT_SEED = "canister_guard_agent_secret_seed_phrase__make_this_unique2"
+agent = Agent(name="canister_guard_agent", seed=AGENT_SEED, mailbox=True)
 fund_agent_if_low(agent.wallet.address())
 
 class Message(Model):
@@ -20,6 +21,16 @@ CANISTER_ID_REGEX = r'([a-z0-9]{5}-){4,}[a-z0-9]{3}'
 
 @agent.on_message(model=Message)
 async def handle_message(ctx: Context, sender: str, msg: Message):
+    # Enhanced logging for message tracking
+    print(f"\n📨 MESSAGE RECEIVED:")
+    print(f"   From: {sender}")
+    print(f"   Content: {msg.text}")
+    print(f"   Time: {ctx.storage.get('timestamp', 'N/A')}")
+    print("-" * 50)
+    
+    # Log incoming message
+    log_incoming(sender, msg.text)
+    
     ctx.logger.info(f"Received message from {sender}: {msg.text}")
 
     # Step 1: Parse the user's input to find a canister ID
@@ -33,6 +44,15 @@ async def handle_message(ctx: Context, sender: str, msg: Message):
             "Please include a valid ICP canister ID (e.g., 'uxrrr-q7777-77774-qaaaq-cai') "
             "in your request."
         )
+        
+        print(f"❌ ERROR RESPONSE:")
+        print(f"   To: {sender}")
+        print(f"   Content: {error_message}")
+        print("-" * 50)
+        
+        # Log outgoing error message
+        log_outgoing(sender, error_message, status="error")
+        
         await ctx.send(sender, Message(text=error_message))
         return
 
@@ -46,6 +66,14 @@ async def handle_message(ctx: Context, sender: str, msg: Message):
         # This will automatically fetch from the local backend canister
         reply_text = get_canister_status_message()
 
+        print(f"✅ SUCCESS RESPONSE:")
+        print(f"   To: {sender}")
+        print(f"   Content: {reply_text}")
+        print("-" * 50)
+
+        # Log outgoing success message
+        log_outgoing(sender, reply_text, status="success")
+
         await ctx.send(sender, Message(text=reply_text))
 
     except Exception as e:
@@ -55,6 +83,15 @@ async def handle_message(ctx: Context, sender: str, msg: Message):
             f"Sorry, an unexpected error occurred while checking the canister status. "
             f"Please make sure the backend is running locally and try again."
         )
+        
+        print(f"❌ ERROR RESPONSE:")
+        print(f"   To: {sender}")
+        print(f"   Content: {error_message}")
+        print("-" * 50)
+        
+        # Log outgoing error message
+        log_outgoing(sender, error_message, status="error")
+        
         await ctx.send(sender, Message(text=error_message))
 
 if __name__ == "__main__":

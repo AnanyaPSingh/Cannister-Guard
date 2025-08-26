@@ -37,6 +37,8 @@ python3 agent.py
 - `agent.py` - Main uAgent implementation with message handling
 - `logic.py` - Core logic for fetching canister status
 - `test_integration.py` - Integration test script
+- `message_logger.py` - Message tracking and logging utility
+- `view_messages.py` - View message history and logs
 - `requirements.txt` - Python dependencies
 
 ## 🔧 How It Works
@@ -52,6 +54,26 @@ Run the integration test to verify everything works:
 ```bash
 python3 test_integration.py
 ```
+
+## 📨 Message Tracking
+
+The agent automatically logs all incoming and outgoing messages. You can view them using:
+
+```bash
+# View recent messages
+python3 view_messages.py
+
+# View more messages
+python3 view_messages.py --limit 20
+
+# View raw log file
+python3 view_messages.py --file
+
+# Clear message log
+python3 view_messages.py --clear
+```
+
+**Message logs are saved to `agent_messages.log` for persistent tracking.**
 
 ## 📝 Usage Examples
 
