@@ -1,0 +1,9 @@
+type CanisterStatus = 
+ record {
+   cycles: nat;
+   memory_size: nat;
+   status: text;
+ };
+service : {
+  get_status: (canisterIdText: text) -> (opt CanisterStatus);
+}
