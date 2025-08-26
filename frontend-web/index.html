@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CanisterGuard - AI-Powered Canister Monitoring</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shield-alt"></i>
+                <span>CanisterGuard</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#dashboard" class="nav-link active">Dashboard</a></li>
+                <li><a href="#monitoring" class="nav-link">Monitoring</a></li>
+                <li><a href="#analytics" class="nav-link">Analytics</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Dashboard Page -->
+        <section id="dashboard" class="page active">
+            <div class="hero-section">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="gradient-text">AI-Powered</span><br>
+                        Canister Monitoring
+                    </h1>
+                    <p class="hero-subtitle">
+                        Monitor your Internet Computer canisters with natural language queries.
+                        Just ask "How's my app doing?" and get instant health insights.
+                    </p>
+                    <div class="hero-actions">
+                        <button class="btn btn-primary" onclick="showDemo()">
+                            <i class="fas fa-play"></i>
+                            Watch Demo
+                        </button>
+                        <button class="btn btn-secondary" onclick="switchPage('monitoring')">
+                            <i class="fas fa-chart-line"></i>
+                            Start Monitoring
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div class="floating-card">
+                        <div class="card-header">
+                            <i class="fas fa-robot"></i>
+                            <span>AI Agent</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="message user-message">
+                                <span>How's my canister doing?</span>
+                            </div>
+                            <div class="message agent-message">
+                                <span>✅ Your canister is healthy!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="features-section">
+                <h2 class="section-title">Why CanisterGuard?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Natural Language</h3>
+                        <p>Ask questions in plain English, no technical knowledge required.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
+                        </div>
+                        <h3>Real-time Monitoring</h3>
+                        <p>Get instant updates on cycles, memory, and status.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Proactive Alerts</h3>
+                        <p>Stay ahead of issues with intelligent monitoring.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monitoring Page -->
+        <section id="monitoring" class="page">
+            <div class="page-header">
+                <h1>Canister Monitoring</h1>
+                <p>Real-time health status of your canisters</p>
+            </div>
+
+            <div class="monitoring-grid">
+                <!-- Healthy Canister -->
+                <div class="canister-card healthy">
+                    <div class="card-header">
+                        <div class="status-indicator healthy">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Healthy</span>
+                        </div>
+                        <h3>Production App</h3>
+                        <p class="canister-id">uxrrr-q7777-77774-qaaaq-cai</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <span class="metric-label">Status</span>
+                            <span class="metric-value healthy">Running</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cycles</span>
+                            <span class="metric-value">2.9T</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Memory</span>
+                            <span class="metric-value">5.4 MB</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Uptime</span>
+                            <span class="metric-value">99.9%</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-primary" onclick="queryCanister('uxrrr-q7777-77774-qaaaq-cai')">
+                            <i class="fas fa-search"></i>
+                            Query Status
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Unhealthy Canister -->
+                <div class="canister-card unhealthy">
+                    <div class="card-header">
+                        <div class="status-indicator unhealthy">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <span>Warning</span>
+                        </div>
+                        <h3>Test App</h3>
+                        <p class="canister-id">test-canister-id-123</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="metric">
+                            <span class="metric-label">Status</span>
+                            <span class="metric-value unhealthy">Low Cycles</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Cycles</span>
+                            <span class="metric-value warning">50M</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Memory</span>
+                            <span class="metric-value">2.1 MB</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Uptime</span>
+                            <span class="metric-value">95.2%</span>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="btn btn-sm btn-warning" onclick="showAlert()">
+                            <i class="fas fa-bell"></i>
+                            Set Alert
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Chat Interface -->
+            <div class="chat-section">
+                <div class="chat-header">
+                    <h3><i class="fas fa-robot"></i> AI Assistant</h3>
+                    <p>Ask about your canisters in natural language</p>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message system-message">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Hello! I'm your CanisterGuard AI assistant. Ask me about your canisters!</span>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="e.g., How's my production app doing?" />
+                    <button onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Analytics Page -->
+        <section id="analytics" class="page">
+            <div class="page-header">
+                <h1>Analytics & Insights</h1>
+                <p>Comprehensive monitoring and performance metrics</p>
+            </div>
+
+            <div class="analytics-grid">
+                <div class="chart-card">
+                    <h3>Cycle Usage Trends</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line"></i>
+                        <p>Cycle consumption over time</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Memory Utilization</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-area"></i>
+                        <p>Memory usage patterns</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Uptime Statistics</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie"></i>
+                        <p>Service availability metrics</p>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Performance Alerts</h3>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-bell"></i>
+                        <p>Alert history and trends</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Demo Modal -->
+    <div id="demoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>CanisterGuard Demo</h2>
+                <span class="close" onclick="closeDemo()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="demo-video">
+                    <div class="video-placeholder">
+                        <i class="fas fa-play-circle"></i>
+                        <p>Demo Video: CanisterGuard in Action</p>
+                    </div>
+                </div>
+                <div class="demo-steps">
+                    <h3>How It Works:</h3>
+                    <ol>
+                        <li>User asks: "How's my canister doing?"</li>
+                        <li>AI agent parses the request</li>
+                        <li>Backend queries ICP for real-time data</li>
+                        <li>Agent responds with formatted status</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/app.js"></script>
+</body>
+</html>
